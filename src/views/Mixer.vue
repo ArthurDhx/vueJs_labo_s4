@@ -10,7 +10,7 @@
         </td>
       </tr>
     </table>
-    <button :disabled="chosenParts.length==0" @click="mix()">Mixing</button>
+    <button :disabled="chosenParts.length===0" @click="mix()">Mixing</button>
 
     <hr/>
     <button @click="$router.push({path:'/labo/slice'})">Go to slicer</button>
@@ -24,12 +24,15 @@
 </template>
 
 <script>
-  import {Virus, viruses} from '../model.js'
+  import {Virus} from '@/model'
   import CheckedList from '../components/CheckedList.vue'
 
   export default {
     name: 'Mixer',
-    props: ['parts'],
+    computed: {
+      parts(){return this.$store.getters["parts/parts"]},
+      viruses(){return this.$store.getters["viruses/viruses"]}
+    },
     data : () => {
       return {
         chosenParts:[],
@@ -52,16 +55,16 @@
           newCode = newCode+p.code;
           chosen.splice(idx,1);
         }
-        this.newVirus = new Virus(viruses.length,'mixedvirus',newCode);
+        this.newVirus = new Virus(this.viruses.length,'mixedvirus',newCode);
         // remove chosen parts
         for(let i=this.chosenParts.length-1;i>=0;i--) {
-          this.parts.splice(this.chosenParts[i],1);
+          this.$store.commit("parts/removePart",this.chosenParts[i])
         }
         // unselect all
         this.chosenParts.splice(0,this.chosenParts.length)
       },
       sendToLibrary : function() {
-        this.$emit('store-virus',this.newVirus);
+        this.$store.commit("viruses/storeViruses",this.newVirus)
         this.newVirus = null;
       }
     }

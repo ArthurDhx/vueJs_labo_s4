@@ -2,17 +2,29 @@
   <div>
     <table>
       <tr><td>Name</td><td>Code</td><td>% Mortality</td></tr>
-      <tr v-for="(v,index) in collec" :key="index"><td>{{v.name}}</td><td>{{v.code}}</td><td>{{v.mortalite}}</td><td> <button @click="$router.push({path: '/library/addbasket?name='+v.name+'&code='+v.code})">Clone virus for the lab</button></td></tr>
+      <tr v-for="(v,index) in collec" :key="index">
+        <td>{{v.name}}</td>
+        <td>{{v.code}}</td>
+        <td>{{v.mortalite}}</td>
+        <td> <button @click="sendToBasket(v)">Clone virus for the lab</button></td>
+      </tr>
     </table>
   </div>
 </template>
 
 <script>
 
-  export default {
-    name: 'Articles',
-    props: ['collec']
+export default {
+  name: 'Articles',
+  computed: {
+    collec() { return this.$store.getters["viruses/viruses"] }
+  },
+  methods:{
+    sendToBasket: function(virus) {
+      this.$store.commit('basket/addVirus',virus)
+    }
   }
+}
 </script>
 
 <style scoped>
