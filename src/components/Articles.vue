@@ -1,14 +1,30 @@
 <template>
   <div>
-    <table>
-      <tr><td>Name</td><td>Code</td><td>% Mortality</td></tr>
-      <tr v-for="(v,index) in collec" :key="index">
-        <td>{{v.name}}</td>
-        <td>{{v.code}}</td>
-        <td>{{v.mortalite}}</td>
-        <td> <button @click="sendToBasket(v)">Clone virus for the lab</button></td>
-      </tr>
-    </table>
+    <v-data-table
+        :headers="titres"
+        :items="collec"
+        :items-per-page="5"
+        class="elevation-1"
+        show-select
+        item-key="id"
+
+    >
+      <template v-slot:item.mortalite="{ item }">
+        <v-chip :style="{background : getColor(item.mortalite)}" dark>
+          {{ item.mortalite }}
+        </v-chip>
+      </template>
+
+      <template v-slot:item.controls="props">
+        <v-btn @click="sendToBasket(props.item)"
+               class="ma-10 pa-5"
+               shaped
+               large
+               outlined
+        >Clone virus for the lab
+        </v-btn>
+      </template>
+    </v-data-table>
   </div>
 </template>
 
@@ -17,12 +33,18 @@
 export default {
   name: 'Articles',
   computed: {
-    collec() { return this.$store.getters["viruses/viruses"] }
+    collec() { return this.$store.getters["viruses/viruses"] },
+    titres() {return this.$store.getters["viruses/titres"]}
   },
   methods:{
     sendToBasket: function(virus) {
       this.$store.commit('basket/addVirus',virus)
-    }
+    },
+    getColor (mortalite) {
+      if (mortalite > 10) return 'red'
+      else if (mortalite> 5) return 'orange'
+      else return 'green'
+    },
   }
 }
 </script>

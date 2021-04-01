@@ -13,5 +13,13 @@ export default {
   },
   getters: {
     basket(state){return state.basket},
+    average(state) {
+      if (state.basket.length === 0) {
+        return 0
+      }
+      let avg = 0
+      state.basket.forEach(e => { avg += e.mortalite})
+      return avg/state.basket.length
+    }
   }
 }

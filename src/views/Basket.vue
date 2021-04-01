@@ -1,15 +1,27 @@
 <template>
   <div>
     <h2>In my basket :</h2>
-    <table >
-      <tr><td>Name</td><td>Code</td><td>% Mortality</td></tr>
-      <tr v-for="(v,index) in basket" :key="index">
-        <td>{{v.name}}</td>
-        <td>{{v.code}}</td>
-        <td>{{v.mortalite}}</td>
-      </tr>
-    </table>
-    <button @click="sendToLab()">Send to the lab</button>
+    <v-container>
+      <v-data-table
+          v-model="selected"
+          :headers="titres"
+          :items="basket"
+          :items-per-page="5"
+          class="elevation-4"
+          show-select
+          item-key="id"
+      >
+      </v-data-table>
+      moyenne sélection: {{average}}
+      <v-btn @click="sendToLab()"
+             class="ma-10 pa-5"
+             shaped
+             large
+             block
+      >Send to lab
+      </v-btn>
+    </v-container>
+
   </div>
 </template>
 
@@ -21,14 +33,16 @@
     name: 'Basket',
     computed: {
       basket(){return this.$store.getters["basket/basket"]},
-      samples(){ return this.$store.getters["samples/samples"]}
+      samples(){ return this.$store.getters["samples/samples"]},
+      titres(){return this.$store.getters["viruses/titres"]},
+      average() {return this.$store.getters["basket/average"]}
     },
     methods: {
       sendToLab : function() {
         let basket = this.basket
         basket.forEach(v => this.$store.commit('samples/addSample',v))
         this.$store.commit("basket/cleanBasket")
-      }
+      },
     },
     /*
     watch: {
