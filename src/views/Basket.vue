@@ -12,7 +12,7 @@
           item-key="id"
       >
       </v-data-table>
-      moyenne sélection: {{average}}
+      moyenne mortalité: {{average}}
       <v-btn @click="sendToLab()"
              class="ma-10 pa-5"
              shaped
@@ -44,16 +44,6 @@
         this.$store.commit("basket/cleanBasket")
       },
     },
-    /*
-    watch: {
-      operation(to, from) {
-        if (to === 'addbasket') {
-          this.$store.commit("basket/addVirus",new Virus(0,this.name, this.code))
-          this.$router.push({path:'/library/view'})
-        }
-      }
-      }
-     */
   }
 </script>
 
