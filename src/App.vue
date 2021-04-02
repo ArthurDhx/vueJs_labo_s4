@@ -2,7 +2,7 @@
   <div id="app">
     <NavBar :titles="titles" />
     <keep-alive>
-      <router-view name="locCentral"></router-view>
+      <router-view name="locCentral" v-if="this.$auth.isAuthenticated"></router-view>
     </keep-alive>
   </div>
 </template>

@@ -14,6 +14,16 @@
           </v-btn>
         </v-col>
       </v-row>
+      <div v-if="!this.$auth.loading" style="margin-top: 20px">
+
+        <v-btn v-if="!this.$auth.isAuthenticated" @click="login" class="ma-10 pa-5" shaped large block>
+          Sign in
+        </v-btn>
+
+        <v-btn v-if="this.$auth.isAuthenticated" @click="logout" class="ma-10 pa-5" shaped large block>
+          Log out
+        </v-btn>
+      </div>
     </v-container>
   </div>
 
@@ -23,7 +33,19 @@
 <script>
 export default {
   name: 'NavBar',
-  props: ['titles']
+  props: ['titles'],
+  methods: {
+    // Log the user in
+    login() {
+      this.$auth.loginWithRedirect();
+    },
+    // Log the user out
+    logout() {
+      this.$auth.logout({
+        returnTo: window.location.origin
+      });
+    }
+  }
 }
 </script>
 
